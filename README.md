@@ -15,6 +15,8 @@ python MainLast.py 10 0 84
 where the 10 reffers to number of loops in search, 0 means False to send the images and respective numbers to Telegram (this feature 
 needs some improvements) and 84 reffers to the DDD (ID for cell phones here) of the phone numbers.
 
+**NOTE THAT: the files on PyFunctions should be in the same folder, together with the properly driver for web driver used by the user.**
+
 ## Chromedriver, etc
 
 The "Chromedriver.exe" makes the connection between Python and the Google Chrome **if** the user have the Google Chrome browser installed 
