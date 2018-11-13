@@ -15,7 +15,9 @@ def TelegramImagePost(temp_numbers):
             bot.send_photo('@imagesFromDisk', photo = open('C:/Users/Fernando Dantas/PyCharmProjects/PeopleFinder/People/{0}.png'.format(temp_numbers[i]),'rb'), caption = '+{0} {1} {2}-{3}'.format(temp_numbers[i][0:2], temp_numbers[i][2:4], temp_numbers[i][4:9], temp_numbers[i][9:len(temp_numbers[i])]))
             print('Sending {0}...'.format(temp_numbers[i]))
         except (TimedOut, FileNotFoundError):
-            i += 1
+            print('TimedOut, FileNotFoundError')
+            sleep(10)
+            continue
         except:
             i += 1
         else:
@@ -26,7 +28,7 @@ def TelegramImagePost(temp_numbers):
     i = 0
     while i < len(temp_numbers):
         try:
-            os.remove('C:/Users/Fernando Dantas/PyCharmProjects/PeopleFinder/People/{0}.png'.format(temp_numbers[i]))
+            os.remove('../People/{0}.png'.format(temp_numbers[i]))
         except PermissionError:
             print('PermissionError')
             continue
