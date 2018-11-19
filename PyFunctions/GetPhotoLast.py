@@ -43,7 +43,7 @@ def GetPhoto(driver, number, photo_indices):
             print('else') # found send message button in common screen
             break
 
-    sleep(3.0)
+    sleep(4.0)
 
     # Two cases:
     # (1. No account)
@@ -57,7 +57,7 @@ def GetPhoto(driver, number, photo_indices):
 
     upper_frame = driver.find_element_by_class_name('_18tv-')
     upper_frame.click()
-    sleep(1.0)
+    sleep(2.0)
 
     # (2. No photo)
     try:

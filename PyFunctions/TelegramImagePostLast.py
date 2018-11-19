@@ -24,8 +24,8 @@ def TelegramImagePost(temp_numbers):
             # print(exception)
             sleep(10)
             continue
-        # except:
-        #     i += 1
+        except:
+            i += 1
         else:
             photo.close()
             i += 1
@@ -35,15 +35,15 @@ def TelegramImagePost(temp_numbers):
     sleep(5.0)
 
     """Removes sent numbers from data"""
-    i = 0
-    while i < len(temp_numbers):
-        try:
-            os.remove('../People/{0}.png'.format(temp_numbers[i]))
-            sleep(1.0)
-        except PermissionError as perr:
-            print(perr)
-            continue
-        except:
-            continue
-        else:
-            i += 1
+    # i = 0
+    # while i < len(temp_numbers):
+    #     try:
+    #         os.remove('../People/{0}.png'.format(temp_numbers[i]))
+    #         sleep(1.0)
+    #     except PermissionError as perr:
+    #         print(perr)
+    #         continue
+    #     except:
+    #         continue
+    #     else:
+    #         i += 1
