@@ -47,3 +47,7 @@ def TelegramImagePost(temp_numbers):
     #         continue
     #     else:
     #         i += 1
+
+    trash_list = os.listdir('../People')
+    for item in trash_list:
+        os.remove('../People/{0}'.format(item))
