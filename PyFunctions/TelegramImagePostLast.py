@@ -2,7 +2,7 @@ import telegram
 from telegram.error import TimedOut
 import os
 from time import sleep
-import progressbar
+
 
 def TelegramImagePost(temp_numbers):
     token = '683213671:AAHk6IN65mLZcvfYThxtg1a9PUXfdX1q_Og'
@@ -12,28 +12,38 @@ def TelegramImagePost(temp_numbers):
     i = 0
     while i < len(temp_numbers):
         try:
-            bot.send_photo('@imagesFromDisk', photo = open('C:/Users/Fernando Dantas/PyCharmProjects/PeopleFinder/People/{0}.png'.format(temp_numbers[i]),'rb'), caption = '+{0} {1} {2}-{3}'.format(temp_numbers[i][0:2], temp_numbers[i][2:4], temp_numbers[i][4:9], temp_numbers[i][9:len(temp_numbers[i])]))
+            photo = open('../People/{0}.png'.format(temp_numbers[i]),'rb')
+            bot.send_photo('@imagesFromDisk',
+                           photo = photo,
+                           caption = '+{0} {1} {2}-{3}'.format(temp_numbers[i][0:2],
+                                                               temp_numbers[i][2:4],
+                                                               temp_numbers[i][4:9],
+                                                               temp_numbers[i][9:len(temp_numbers[i])]))
             print('Sending {0}...'.format(temp_numbers[i]))
-        except (TimedOut, FileNotFoundError):
-            print('TimedOut, FileNotFoundError')
+        except (TimedOut, FileNotFoundError) as exception:
+            # print(exception)
             sleep(10)
             continue
-        except:
-            i += 1
+        # except:
+        #     i += 1
         else:
+            photo.close()
             i += 1
 
     del(bot)
+
     sleep(5.0)
+
+    """Removes sent numbers from data"""
     i = 0
     while i < len(temp_numbers):
         try:
             os.remove('../People/{0}.png'.format(temp_numbers[i]))
-        except PermissionError:
-            print('PermissionError')
+            sleep(1.0)
+        except PermissionError as perr:
+            print(perr)
             continue
         except:
-            continue 
+            continue
         else:
             i += 1
-

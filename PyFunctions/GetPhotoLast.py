@@ -30,10 +30,10 @@ def GetPhoto(driver, number, photo_indices):
         try:
             send_message = driver.find_element_by_class_name('button--simple')
             send_message.click()
-            element = WebDriverWait(driver, timeout=5).until(
+            element = WebDriverWait(driver, timeout=10).until(
                 lambda driver: driver.find_element_by_class_name('_3q4NP'))
         except NoSuchElementException:
-            send_message.click()
+            # send_message.click()
             print('except NoSuchElementException')
             continue
         except:
@@ -43,7 +43,7 @@ def GetPhoto(driver, number, photo_indices):
             print('else') # found send message button in common screen
             break
 
-    sleep(1.0)
+    sleep(3.0)
 
     # Two cases:
     # (1. No account)

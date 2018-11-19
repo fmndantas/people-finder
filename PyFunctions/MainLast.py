@@ -5,12 +5,25 @@ import random
 import shelve
 from selenium import webdriver
 import sys
+import os
 import progressbar
 from time import sleep
 
 if __name__ == "__main__":
-    
-    data = shelve.open('C:/Users/Fernando Dantas/PycharmProjects/PeopleFinder/shelve/peopleData') #import data
+
+    """
+    while True:
+        try:
+            data = shelve.open('../Shelve/peopleData') #import data
+        except:
+            os.makedirs('../Shelve')
+            continue
+        else:
+            break
+    # print(data)
+    """
+    data = shelve.open('../Shelve/peopleData') # import data
+    # print(data)
 
     driver = webdriver.Chrome()
     driver.get('https://web.whatsapp.com')
@@ -40,7 +53,9 @@ if __name__ == "__main__":
             numbers.append(number)
         else:
             k += 1
+
     DataRegister(data, numbers, i)
+
     driver.close()
 
     if int(send) == 1:
