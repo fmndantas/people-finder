@@ -11,7 +11,6 @@ from time import sleep
 
 if __name__ == "__main__":
 
-    """
     while True:
         try:
             data = shelve.open('../Shelve/peopleData') #import data
@@ -20,10 +19,8 @@ if __name__ == "__main__":
             continue
         else:
             break
-    # print(data)
-    """
-    data = shelve.open('../Shelve/peopleData') # import data
-    # print(data)
+
+    data = shelve.open('../Shelve/peopleData') # import or creates data
 
     driver = webdriver.Chrome()
     driver.get('https://web.whatsapp.com')

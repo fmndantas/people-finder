@@ -1,4 +1,4 @@
-from selenium import webdriver
+# from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, WebDriverException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from time import sleep
@@ -10,13 +10,17 @@ import os
 
 # _18tv- : upper_frame object
 
-# _1WliW : expande profile photo
+# _1WliW : expand profile photo
 
 # _3ZW2E : raises WebDriveException to photo case
 
 def GetPhoto(driver, number, photo_indices):
-    """ Takes the photo and number given a contact in whatsapp """
-    """ GetPhoto(Photo, number, photo_indices) """
+
+    """ Takes the photo and number of a given contact in WhatsApp
+        ______________________________________________________
+        Call: GetPhoto(driver, number, photo_indices)
+        ------------------------------------------------------
+    """
 
     if 'People' not in os.listdir('..'): # Creates people dir, if it doesn't exists yet
         os.makedirs('../People')
@@ -34,13 +38,13 @@ def GetPhoto(driver, number, photo_indices):
                 lambda driver: driver.find_element_by_class_name('_3q4NP'))
         except NoSuchElementException:
             # send_message.click()
-            print('except NoSuchElementException')
+            # print('except NoSuchElementException')
             continue
         except:
-            print('except')
+            # print('except')
             continue
         else:
-            print('else') # found send message button in common screen
+            # print('else') # found send message button in common screen
             break
 
     sleep(4.0)
@@ -68,8 +72,7 @@ def GetPhoto(driver, number, photo_indices):
         photo.click()
         driver.set_window_size(height=1000, width=600)
         #os.makedirs('./People')
-        driver.get_screenshot_as_file(
-            '../People/{0}.png'.format(str(number)))
+        driver.get_screenshot_as_file('../People/{0}.png'.format(str(number)))
         print('Screenshot OKAY')
         return True
     else:
