@@ -1,26 +1,22 @@
 # people-finder
-Stalker tool for antissocial nerds.
+Tools for finding and storing profile pics of whatsapp contacts in large scale.
 
-The main purpose of this project is give access kind of stalker tool based upon on WhatsApp Web.
+## Installation
+### From pypi
+
+    $ pip install peoplefinder
+
+### From source (current version 1.0b1)
+
+    $ git clone https://github.com/fmndantas/people-finder.git
+    $ cd people-finder
+    $ python setup.py install
 
 ## Usage
 
-A graphical interface will be implemented in future updates, but, for now, the usage is *inline*. I've set up the number's format to my
-country, Brazil (+55 XX X XXXX-XXXX). A example of use is
+A graphical interface will be implemented in future updates, but, for now, the usage is *inline*. We've set up the number's format to our
+country, Brazil (+55 XX XXXX-XXXX). A example of use is
 
-```
-python MainLast.py 10 0 84
-```
+    $ peoplefinder -n 10 -d 84
 
-where the 10 reffers to number of loops in search, 0 means False to send the images and respective numbers to Telegram (this feature 
-needs some improvements) and 84 reffers to the DDD (ID for cell phones here) of the phone numbers.
-
-**NOTE THAT: the files on PyFunctions should be in the same folder, together with the properly driver for web driver used by the user.**
-
-## Chromedriver, etc
-
-The "Chromedriver.exe" makes the connection between Python and the Google Chrome **if** the user have the Google Chrome browser installed 
-and intents to use it to execute the algorithm.
-
-If the user intents to use another browser, he should download the driver for his respective browser and make sure that the driver is in the
-same folder than the py functions.
+where the 10 refers to number of loops in search, and 84 refers to the local area code of the phone numbers.
