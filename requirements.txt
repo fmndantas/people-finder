@@ -1,0 +1,5 @@
+numpy>=1.11
+tqdm
+selenium
+python-telegram-bot
+astropy
