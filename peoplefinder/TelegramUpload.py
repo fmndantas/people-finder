@@ -1,14 +1,16 @@
 import glob
+import os
 
 import numpy as np
 import telegram
 from astropy.table import Table
 from tqdm.auto import tqdm
 
+BOT_TOKEN = os.environ.get('PEOPLE_API_TOKEN')
 
-def telegram_upload(savedir, verbose=False):
-    token = '553832519:AAEnl7EidBzpZ6wpwMLXeQ3qRlt97CoG5NQ'
-    bot = telegram.Bot(token)
+
+def telegram_upload(savedir, verbose=False, clear=False):
+    bot = telegram.Bot(BOT_TOKEN)
 
     if verbose:
         print('\nSending images to Telegram...\n')
