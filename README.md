@@ -12,6 +12,11 @@ Tools for finding and storing profile pics of whatsapp contacts in large scale.
     $ cd people-finder
     $ python setup.py install
 
+### Telegram API token
+
+If you plan to use `peopleuploader` functionalities, make sure your environment
+variable PEOPLE_API_TOKEN points to our bot.
+
 ## Usage
 
 A graphical interface will be implemented in future updates, but, for now, the usage is *inline*. We've set up the number's format to our
