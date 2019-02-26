@@ -11,7 +11,7 @@ def telegram_upload(savedir, verbose=False):
     bot = telegram.Bot(token)
 
     if verbose:
-        print('\nNow sending the images for Telegram...\n')
+        print('\nSending images to Telegram...\n')
 
     files = glob.glob(savedir + '*.png')
     data = Table.read(savedir + 'data.csv')
@@ -19,14 +19,15 @@ def telegram_upload(savedir, verbose=False):
     for file in tqdm(files):
         phone = file[-17:-4]
         phones = np.array(data['phone'])
-        status = data[phones == int(phone)]['status']
+        status = data[phones == phone]['status'][0]
         photo = open(file, 'rb')
         bot.send_photo('@peoplefinder',
                        photo=photo,
                        caption='Phone number: +{0} {1} {2}-{3}\n'
                                'Status: {4}\n'
                                'https://api.whatsapp.com/send?phone={5}'.format(
-                                phone[0:2], phone[2:4], phone[4:9], phone[9:], status, phone))
+                                phone[0:2], phone[2:4], phone[4:9], phone[9:], status, phone),
+                       timeout=60)
         if verbose:
             print('Sending {0}...'.format(phone))
         photo.close()
