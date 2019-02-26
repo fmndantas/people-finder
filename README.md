@@ -21,5 +21,12 @@ country, Brazil (+55 XX XXXX-XXXX). A example of use is
 
 where the 10 refers to number of loops in search, 84 refers to the local area code of the phone numbers and
 the `-r` flag indicates random number generation
+
 Alternatively one can create a list of numbers in a file named 
-input.txt in the same directory.
+input.txt in the same directory and omit this flag.
+
+### Uploading to telegram @peoplefinder
+
+    $ peopleuploader [-s <savedir>]
+    
+This will upload all pictures inside savedir.
