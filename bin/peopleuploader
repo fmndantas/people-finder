@@ -22,5 +22,12 @@ parser.add_argument(
     action='store_true',
 )
 
+parser.add_argument(
+    '-c', '--clear',
+    dest='clear',
+    help='clear directory after uploading',
+    action='store_true',
+)
+
 args = parser.parse_args()
-telegram_upload(args.savedir, args.verbose)
+telegram_upload(args.savedir, args.verbose, args.clear)

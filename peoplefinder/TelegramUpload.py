@@ -31,5 +31,7 @@ def telegram_upload(savedir, verbose=False):
         if verbose:
             print('Sending {0}...'.format(phone))
         photo.close()
+        if clear:
+            os.remove(file)
 
     del bot
