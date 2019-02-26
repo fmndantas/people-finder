@@ -2,21 +2,11 @@ from time import sleep
 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-
-
-# _3q4NP : common screen, to get into the decision screen
-
-# _15JHr : no account case
-
-# _18tv- : upper_frame object
-
-# _1WliW : expand profile photo
-
-# _3ZW2E : raises WebDriveException to photo case
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 
 def text(driver):
-    header = driver.find_element_by_class_name('_3AwwN')
+    header = driver.find_element_by_class_name('_2y17h')
     header.click()
     # wait until text has loaded in the sidebar
     WebDriverWait(driver, 10).until(EC.text_to_be_present_in_element(('class name', '_14oqx'), 'Mute'))
@@ -48,16 +38,16 @@ def get_data(driver, phone, savedir):
     """
 
     driver.get('https://web.whatsapp.com/send?phone={}'.format(phone))
+    sleep(2.0)
     try:
-        sleep(2.0)
         WebDriverWait(driver, 30).until_not(EC.presence_of_element_located(('class name', '_2dA13')))
-    except:
-        return
+    except TimeoutException:
+        return None
 
     try:
         status = text(driver)
-    except:
-        return
+    except NoSuchElementException:
+        return None
 
     filename = screenshot(driver, savedir, phone)
 
