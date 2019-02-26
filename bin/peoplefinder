@@ -1,22 +1,26 @@
 #!/usr/bin/env python
 import argparse
+import glob
 import os
 
 import numpy as np
 from selenium import webdriver
+from selenium.webdriver.firefox.webdriver import FirefoxProfile
 from tqdm.auto import tqdm
 
 from peoplefinder import get_data, save_data
 
+home_dir = os.getenv("HOME") + '/'
+
 
 def login():
-    drvr = webdriver.Firefox()
+    default_profile = glob.glob(home_dir + '.mozilla/firefox/*.default')[0]
+    profile = FirefoxProfile(default_profile)
+    drvr = webdriver.Firefox(firefox_profile=profile)
+    drvr.implicitly_wait(10)
     drvr.get("https://web.whatsapp.com")
-    input("press enter once you login")
     return drvr
 
-
-home_dir = os.getenv("HOME") + '/'
 
 parser = argparse.ArgumentParser(description='collects whatsapp profile pictures.')
 parser.add_argument(
@@ -56,8 +60,7 @@ parser.add_argument(
 parser.add_argument(
     '-r', '--random',
     dest='random',
-    default=home_dir,
-    help='directory to store pictures.',
+    help='whether to pick random numbers between min and max or use input.txt',
     action='store_true',
 )
 
@@ -76,7 +79,9 @@ else:
 driver = login()
 for number in tqdm(numbers):
     phone = '55{0:02d}9{1:08d}'.format(ddd, number)
-    filename, status = get_data(driver, phone, savedir)
-    save_data(savedir, phone, filename, status)
+    data = get_data(driver, phone, savedir)
+    if data is not None:
+        filename, status = data
+        save_data(savedir, phone, filename, status)
 
 driver.close()
