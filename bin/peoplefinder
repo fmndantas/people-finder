@@ -5,6 +5,7 @@ import os
 
 import numpy as np
 from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.webdriver import FirefoxProfile
 from tqdm.auto import tqdm
 
@@ -16,7 +17,9 @@ home_dir = os.getenv("HOME") + '/'
 def login():
     default_profile = glob.glob(home_dir + '.mozilla/firefox/*.default')[0]
     profile = FirefoxProfile(default_profile)
-    drvr = webdriver.Firefox(firefox_profile=profile)
+    options = Options()
+    options.add_argument('-headless')
+    drvr = webdriver.Firefox(firefox_profile=profile, firefox_options=options)
     drvr.implicitly_wait(10)
     drvr.get("https://web.whatsapp.com")
     return drvr
@@ -60,7 +63,7 @@ parser.add_argument(
 parser.add_argument(
     '-r', '--random',
     dest='random',
-    help='whether to pick random numbers between min and max or use input.txt',
+    help='whether to pick random numbers between MIN and MAX or use input.txt',
     action='store_true',
 )
 
@@ -84,4 +87,4 @@ for number in tqdm(numbers):
         filename, status = data
         save_data(savedir, phone, filename, status)
 
-driver.close()
+driver.quit()
