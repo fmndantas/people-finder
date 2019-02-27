@@ -5,7 +5,7 @@ with open("README.md", 'r') as f:
 
 setuptools.setup(
     name="peoplefinder",
-    version="1.0b1",
+    version="1.0b2",
     author="Eduardo Nunes & Fernando Dantas",
     license="MIT",
     description="Tools for finding and storing profile pics of whatsapp contacts in large scale.",

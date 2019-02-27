@@ -2,11 +2,11 @@
 Tools for finding and storing profile pics of whatsapp contacts in large scale.
 
 ## Installation
-### From pypi
+### From pypi (current version 1.0b1)
 
     $ pip install peoplefinder
 
-### From source (current version 1.0b1)
+### From source (current version 1.0b2)
 
     $ git clone https://github.com/fmndantas/people-finder.git
     $ cd people-finder
