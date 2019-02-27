@@ -1,0 +1,90 @@
+#!/usr/bin/env python
+import argparse
+import glob
+import os
+
+import numpy as np
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.webdriver import FirefoxProfile
+from tqdm.auto import tqdm
+
+from peoplefinder import get_data, save_data
+
+home_dir = os.getenv("HOME") + '/'
+
+
+def login():
+    default_profile = glob.glob(home_dir + '.mozilla/firefox/*.default')[0]
+    profile = FirefoxProfile(default_profile)
+    options = Options()
+    options.add_argument('-headless')
+    drvr = webdriver.Firefox(firefox_profile=profile, firefox_options=options)
+    drvr.implicitly_wait(10)
+    drvr.get("https://web.whatsapp.com")
+    return drvr
+
+
+parser = argparse.ArgumentParser(description='collects whatsapp profile pictures.')
+parser.add_argument(
+    '-n', '--number',
+    dest='number',
+    default=10,
+    help='how many numbers to search?',
+    type=int
+)
+parser.add_argument(
+    '-m', '--min',
+    dest='min',
+    default=80000000,
+    help='lower limit in phone numbers.',
+    type=int
+)
+parser.add_argument(
+    '-M', '--max',
+    dest='max',
+    default=99999999,
+    help='upper limit in phone numbers.',
+    type=int
+)
+parser.add_argument(
+    '-d', '--ddd',
+    dest='ddd',
+    default=84,
+    help='local area code.',
+    type=int
+)
+parser.add_argument(
+    '-s', '--savedir',
+    dest='savedir',
+    default=home_dir,
+    help='directory to store pictures.',
+)
+parser.add_argument(
+    '-r', '--random',
+    dest='random',
+    help='whether to pick random numbers between MIN and MAX or use input.txt',
+    action='store_true',
+)
+
+args = parser.parse_args()
+N = args.number
+pmin = args.min
+pmax = args.max
+ddd = args.ddd
+savedir = args.savedir
+
+if args.random:
+    numbers = np.random.randint(pmin, pmax, N)
+else:
+    numbers = np.loadtxt(savedir + 'input.txt', dtype=int)
+
+driver = login()
+for number in tqdm(numbers):
+    phone = '55{0:02d}9{1:08d}'.format(ddd, number)
+    data = get_data(driver, phone, savedir)
+    if data is not None:
+        filename, status = data
+        save_data(savedir, phone, filename, status)
+
+driver.quit()

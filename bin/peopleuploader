@@ -1,0 +1,33 @@
+#!/usr/bin/env python
+import argparse
+import os
+
+from peoplefinder import telegram_upload
+
+home_dir = os.getenv("HOME")
+
+parser = argparse.ArgumentParser(description='uploads data from peoplefinder to telegram channel @peoplefinder')
+
+parser.add_argument(
+    '-s', '--savedir',
+    dest='savedir',
+    default=home_dir,
+    help='directory to store pictures.',
+)
+
+parser.add_argument(
+    '-v', '--verbose',
+    dest='verbose',
+    help='print log messages',
+    action='store_true',
+)
+
+parser.add_argument(
+    '-c', '--clear',
+    dest='clear',
+    help='clear directory after uploading',
+    action='store_true',
+)
+
+args = parser.parse_args()
+telegram_upload(args.savedir, args.verbose, args.clear)
