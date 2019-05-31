@@ -3,3 +3,5 @@ tqdm
 selenium
 python-telegram-bot
 astropy
+xlrd
+xlwt
