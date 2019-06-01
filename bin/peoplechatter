@@ -34,7 +34,7 @@ def login(debug_mode=False):
     if not debug_mode:
         options.add_argument('-headless')
     try:
-        drvr = webdriver.Firefox(firefox_profile=profile, firefox_options=options)
+        drvr = webdriver.Firefox(firefox_profile=profile, options=options)
         drvr.implicitly_wait(20)
     except Exception:
         logging.error(traceback.format_exc())
@@ -46,7 +46,7 @@ def routine(driver, sourcefile, procedure):
     """
     names, phones = getPhonesAndNames(sourcefile)
     if procedure == 't':
-        for phone in phones:
+        for phone in tqdm(phones):
             assert (type(phone) == str)
             assert (len(phone) in (10, 11))
             ddd, number = phone[:2], phone[2:]
@@ -79,7 +79,7 @@ parser.add_argument(
     '-d', '--debug',
     dest='debug',
     default=False,
-    help='show firefox while sending things',
+    help='show browser while sending text/media',
     type=bool,
 )
 

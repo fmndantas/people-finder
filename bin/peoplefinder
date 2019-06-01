@@ -2,24 +2,49 @@
 import argparse
 import glob
 import os
+from time import sleep
 
 import numpy as np
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.webdriver import FirefoxProfile
 from tqdm.auto import tqdm
+import sqlite3
 
-from peoplefinder import get_data, save_data
+from peoplefinder.GetData import get_data
+from peoplefinder.SaveData import save_data
+from peoplefinder.SendData import send_text_data
 
-home_dir = os.getenv("HOME") + '/'
+home_dir = os.getenv('userprofile') + os.sep
+save_dir = os.path.join(home_dir, 'peoplefinder' + os.sep)
+photos_dir = os.path.join(save_dir, 'photos' + os.sep)
 
+if not os.path.exists(save_dir):
+    os.mkdir(save_dir)
+
+if not os.path.exists(photos_dir):
+    os.mkdir(photos_dir)
+
+if not os.path.exists(os.path.join(save_dir, 'data.db')):
+        sleep(0.5)
+        conn = sqlite3.connect(os.path.join(save_dir, 'data.db'))
+        conn.execute("""
+        CREATE TABLE data (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        phone TEXT,
+        status TEXT,
+        photo TEXT,
+        laststream TEXT);
+        """)
+        conn.close()
 
 def login():
-    default_profile = glob.glob(home_dir + '.mozilla/firefox/*.default')[0]
+    default_profile = glob.glob(home_dir + 'AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\*.default')[0]
+    print(default_profile)
     profile = FirefoxProfile(default_profile)
     options = Options()
     options.add_argument('-headless')
     drvr = webdriver.Firefox(firefox_profile=profile, firefox_options=options)
+    drvr = webdriver.Firefox()
     drvr.implicitly_wait(10)
     drvr.get("https://web.whatsapp.com")
     return drvr
@@ -57,7 +82,7 @@ parser.add_argument(
 parser.add_argument(
     '-s', '--savedir',
     dest='savedir',
-    default=home_dir,
+    default=save_dir,
     help='directory to store pictures.',
 )
 parser.add_argument(
@@ -66,6 +91,12 @@ parser.add_argument(
     help='whether to pick random numbers between MIN and MAX or use input.txt',
     action='store_true',
 )
+parser.add_argument(
+    '-t', '--stream',
+    dest='stream',
+    help='set the stream.txt file or use data folder to get stream media',
+    default=os.path.join(save_dir, 'stream.txt')
+)
 
 args = parser.parse_args()
 N = args.number
@@ -73,18 +104,34 @@ pmin = args.min
 pmax = args.max
 ddd = args.ddd
 savedir = args.savedir
+msg_file = args.stream
+
+try:
+    if msg_file:
+        msg = open(msg_file).read()
+    else:
+        msg = ''
+except FileNotFoundError:
+    with open(msg_file, 'w') as stream:
+        stream.write('')
+    msg = ''
 
 if args.random:
     numbers = np.random.randint(pmin, pmax, N)
 else:
-    numbers = np.loadtxt(savedir + 'input.txt', dtype=int)
+    with open(os.path.join(save_dir, 'input.txt')) as numbers_list:
+        numbers = map(lambda x: int(x), numbers_list.readlines())
 
 driver = login()
 for number in tqdm(numbers):
     phone = '55{0:02d}9{1:08d}'.format(ddd, number)
-    data = get_data(driver, phone, savedir)
+    if msg:
+        stream = send_text_data(driver, phone, msg)
+    else:
+        stream = ''
+    data = get_data(driver, phone, savedir, stream)
     if data is not None:
         filename, status = data
-        save_data(savedir, phone, filename, status)
+        save_data(savedir, phone, filename, status, stream)
 
 driver.quit()

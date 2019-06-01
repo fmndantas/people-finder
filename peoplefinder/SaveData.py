@@ -1,8 +1,27 @@
+import os
 import numpy as np
 from astropy.table import Table
+import sqlite3
+
+def save_data(savedir, phone, filename, status, stream):
+    conn = sqlite3.connect(os.path.join(savedir, 'data.db'))
+    cursor = conn.cursor()
+    fetch = cursor.execute("""SELECT phone FROM data""")
+    # TODO: data exists but not the table
+    if (phone,) in fetch.fetchall():
+        cursor.execute("""
+        UPDATE data
+        SET status = ?, phone = ?, laststream = ?
+        WHERE phone = ?
+        """, (status, filename, stream, phone))
+    else:
+        cursor.execute("""INSERT INTO data (phone, status, photo, laststream)
+        VALUES (?, ?, ?, ?)""", (phone, status, filename, stream))
+        conn.commit()
+    conn.close()
 
 
-def save_data(savedir, phone, filename, status):
+def save_data_astropy(savedir, phone, filename, status):
     try:
         data = Table.read(savedir + 'data.csv')
     except FileNotFoundError:

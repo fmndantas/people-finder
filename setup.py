@@ -1,14 +1,7 @@
 import setuptools
-from pathlib import Path
-import sys
 
 with open("README.md", 'r') as f:
     long_description = f.read()
-
-_PACK_BASE_DIR_ = Path(__file__)
-
-if sys.platform in ('win32', 'win64'):
-    sys.path.append(Path.joinpath(_PACK_BASE_DIR_, '/bin'))
 
 setuptools.setup(
     name="peoplefinder",
@@ -25,6 +18,6 @@ setuptools.setup(
     classifiers=(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
-        "Operating System :: Unix",
+        "Operating System :: Unix, Windows",
     ),
 )
