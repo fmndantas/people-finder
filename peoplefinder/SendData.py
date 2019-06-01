@@ -5,66 +5,49 @@ import os
 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 
 
 def send_text_data(driver, phone, msg):
     driver.get('https://web.whatsapp.com/send?phone={}'.format(phone))
+    text_box_xpath = "/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div[2]/div/div[2]"
     try:
-        # Verify valid number. If the number doesn't exist, raise TimeoutException
-        WebDriverWait(driver, 5).until_not(EC.presence_of_element_located(('class name', '_2dA13')))
+        WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, text_box_xpath)))
     except TimeoutException:
         return None
-    try:
-        # Verify if the text box has appeared in the screen. If not, raise TimeoutException
-        WebDriverWait(driver, 5).until(EC.presence_of_element_located(('class name', '_2S1VP')))
-    except TimeoutException:
-        return None
-    textbox = driver.find_element_by_class_name('_2S1VP')
-    textbox.send_keys(msg)
-    sleep(5)
-    return msg
-
+    text_box = driver.find_element((By.XPATH, text_box_xpath))
+    text_box.send_keys(msg)
+    text_box.send_keys(Keys.ENTER)
+    sleep(1)
 
 def send_image_data(driver, phone, img_path, img_label):
     # From here, assumes that the user is logged in
     if os.path.exists(img_path):
         driver.get('https://web.whatsapp.com/send?phone={}'.format(phone))
-        while True:  # Fast version
-            try:
-                assert (len(driver.find_elements_by_xpath('//header')) == 2)
-            except AssertionError:
-                continue
-            else:
-                break
-        while True:
-            try:
-                driver.find_elements_by_xpath('//div[@title="Attach"]')[0].click()
-            except Exception as Error:
-                continue
-            else:
-                break
-        image = driver.find_elements_by_xpath('//button[@data-animate-menu-icons-item="true"]')[0]
-        image.click()
+        clip_xpath = '/html/body/div[1]/div/div/div[4]/div/header/div[3]/div/div[2]'
+        image_xpath = '/html/body/div[1]/div/div/div[4]/div/header/div[3]/div/div[2]/span/div/div/ul/li[1]/button'
+        try:
+            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, clip_xpath)))
+            driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[4]/div/div/div[2]/h1')
+        except (TimeoutException, NoSuchElementException):
+            return None
+        driver.find_element(By.XPATH, clip_xpath).click()
+        driver.find_element(By.XPATH, image_xpath).click()
         autoit.win_wait("File Upload")
         # Minimize
         autoit.win_set_state("File Upload", properties.SW_MINIMIZE)
-        sleep(2)
         autoit.control_send("File Upload", "[CLASS:Edit]", img_path, mode=0)
-        sleep(2)
         autoit.control_click("File Upload", "[CLASS:Button]")
         autoit.win_close("File Upload")
         autoit.win_wait_close("File Upload")
-        sleep(2)
-        img_label_box = driver.find_elements_by_xpath('//div[@spellcheck="true"]')[0]
+        add_caption_xpath = '/html/body/div[1]/div/div/div[2]/div[2]/span/div/span/div/div/div[2]/div/span/div/div[2]/div/div[3]/div[1]/div[2]'
+        add_caption = driver.find_element(By.XPATH, add_caption_xpath)
         if img_label:
-            img_label_box.send_keys(img_label)
-        img_label_box.send_keys(Keys.ENTER)
-        sleep(2)
+            add_caption.send_keys(img_label)
+        add_caption.send_keys(Keys.ENTER)
         return img_label
     else:
         # The file is wrong
-        return None
-
-
+        driver.close()
