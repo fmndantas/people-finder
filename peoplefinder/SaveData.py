@@ -3,23 +3,33 @@ import numpy as np
 from astropy.table import Table
 import sqlite3
 
-def save_data(savedir, phone, filename, status, stream):
+def create_data_set(_SAVEDIR_):
+    if not os.path.exists(os.path.join(_SAVEDIR_, 'data.db')):
+        conn = sqlite3.connect(os.path.join(_SAVEDIR_, 'data.db'))
+        conn.execute("""
+            CREATE TABLE data (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+            phone TEXT,
+            status TEXT,
+            photo TEXT);
+            """)
+        conn.close()
+
+def save_data(savedir, phone, filename, status):
+    create_data_set(savedir)
     conn = sqlite3.connect(os.path.join(savedir, 'data.db'))
     cursor = conn.cursor()
     fetch = cursor.execute("""SELECT phone FROM data""")
-    # TODO: data exists but not the table
     if (phone,) in fetch.fetchall():
         cursor.execute("""
         UPDATE data
-        SET status = ?, phone = ?, laststream = ?
+        SET status = ?, phone = ?
         WHERE phone = ?
-        """, (status, filename, stream, phone))
+        """, (status, filename, phone))
     else:
-        cursor.execute("""INSERT INTO data (phone, status, photo, laststream)
-        VALUES (?, ?, ?, ?)""", (phone, status, filename, stream))
+        cursor.execute("""INSERT INTO data (phone, status, photo)
+        VALUES (?, ?, ?)""", (phone, status, filename))
         conn.commit()
     conn.close()
-
 
 def save_data_astropy(savedir, phone, filename, status):
     try:
