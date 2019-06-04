@@ -14,7 +14,7 @@ setuptools.setup(
     url="https://github.com/fmndantas/people-finder",
     packages=setuptools.find_packages(),
     scripts=["bin/peoplefinder", "bin/peopleuploader", "bin/peoplechatter"],
-    install_requires=['numpy>=1.11', 'selenium', 'tqdm', 'python-telegram-bot', 'astropy', 'pyautoit'],
+    install_requires=['numpy>=1.11', 'selenium', 'tqdm', 'python-telegram-bot', 'astropy', 'pyautoit', 'pytest', 'xlrd'],
     classifiers=(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
