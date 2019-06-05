@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 import argparse
+import logging
 import os
 import time
+import traceback
 
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 from tqdm.auto import tqdm
-import logging, traceback
 
 from peoplefinder.SendData import send_text_data, send_image_data
 from peoplefinder.common import login
@@ -15,6 +13,7 @@ from peoplefinder.csvcompat import getPhonesAndNames
 
 _HOME_ = os.getenv('userprofile')
 _SAVEDIR_ = os.path.join(_HOME_, 'peoplechatter')
+
 
 def routine(driver, sourcefile, procedure, imgsource=None, msg=''):
     """Performs sending media to WhatsApp contacts"""
@@ -36,6 +35,7 @@ def routine(driver, sourcefile, procedure, imgsource=None, msg=''):
             send_image_data(driver, phone, imgsource, msg)
     driver.close()
     return report
+
 
 parser = argparse.ArgumentParser(description='send data to whatsapp contacts')
 parser.add_argument(
@@ -81,7 +81,7 @@ try:
     start = time.time()
     routine(driver, args.source, args.mode, args.image, msg)
     end = time.time()
-    print('Total execution time (s): {}'.format(int(end-start)))
+    print('Total execution time (s): {}'.format(int(end - start)))
 except Exception:
     logging.error(traceback.format_exc())
 finally:

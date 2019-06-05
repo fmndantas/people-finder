@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import argparse
-import os, sys
+import logging
+import traceback
 from time import strftime
 
 import numpy as np
@@ -9,16 +10,10 @@ from tqdm.auto import tqdm
 from peoplefinder.GetData import get_data
 from peoplefinder.SaveData import save_data
 from peoplefinder.common import *
-import logging, traceback
-
 
 _HOME_ = os.getenv('userprofile')
 
 _SAVEDIR_ = os.path.join(_HOME_, 'peoplefinder')
-if not os.path.exists(_SAVEDIR_):
-    # put this in setup
-    make_dirs(sys.platform)
-
 _NEW_FOLDER_NAME_ = strftime('%d_%m_%y-%Hh%Mmin')
 _NEW_FOLDER_PATH_ = os.path.join(_SAVEDIR_, _NEW_FOLDER_NAME_)
 try:
