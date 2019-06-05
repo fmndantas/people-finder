@@ -1,5 +1,5 @@
 import glob
-import os
+import os, sys
 import shutil
 from pathlib import Path
 
@@ -13,12 +13,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 _HOME_ = os.getenv('userprofile')
 _PACK_PARENT_ = Path(__file__).parent.parent
 
-def make_dirs(platform):
+def make_dirs():
+    platform = sys.platform
     try:
         if platform in ('win32', 'win64'):
-            print('Sample directories')
             for dir in os.listdir(os.path.join(_PACK_PARENT_, 'folders')):
                 shutil.copytree(os.path.join(_PACK_PARENT_, 'folders'+os.sep+dir), os.path.join(_HOME_, dir))
+        elif platform in ('linux'):
+            pass
     except FileExistsError:
         pass
 
