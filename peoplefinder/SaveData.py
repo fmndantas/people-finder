@@ -3,9 +3,10 @@ import numpy as np
 from astropy.table import Table
 import sqlite3
 
-def create_data_set(_SAVEDIR_):
-    if not os.path.exists(os.path.join(_SAVEDIR_, 'data.db')):
-        conn = sqlite3.connect(os.path.join(_SAVEDIR_, 'data.db'))
+
+def create_data_set(savedir):
+    if not os.path.exists(os.path.join(savedir, 'data.db')):
+        conn = sqlite3.connect(os.path.join(savedir, 'data.db'))
         conn.execute("""
             CREATE TABLE data (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
             phone TEXT,
@@ -13,6 +14,7 @@ def create_data_set(_SAVEDIR_):
             photo TEXT);
             """)
         conn.close()
+
 
 def save_data(savedir, phone, filename, status):
     create_data_set(savedir)
@@ -31,6 +33,7 @@ def save_data(savedir, phone, filename, status):
         conn.commit()
     conn.close()
 
+
 def save_data_astropy(savedir, phone, filename, status):
     try:
         data = Table.read(savedir + 'data.csv')
@@ -48,4 +51,3 @@ def save_data_astropy(savedir, phone, filename, status):
         data.add_row([phone, status, filename])
 
     data.write(savedir + 'data.csv', overwrite=True)
-
