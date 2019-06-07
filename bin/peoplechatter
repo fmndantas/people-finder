@@ -18,7 +18,6 @@ _SAVEDIR_ = os.path.join(_HOME_, 'peoplechatter')
 def routine(driver, sourcefile, procedure, imgsource=None, msg=''):
     """Performs sending media to WhatsApp contacts"""
     names, phones = getPhonesAndNames(sourcefile)
-    report = []
     if procedure == 't':
         for phone in tqdm(phones):
             assert (type(phone) == str)
@@ -33,8 +32,6 @@ def routine(driver, sourcefile, procedure, imgsource=None, msg=''):
             ddd, number = phone[:2], phone[2:]
             phone = '55{0}{1}'.format(ddd, number)
             send_image_data(driver, phone, imgsource, msg)
-    driver.close()
-    return report
 
 
 parser = argparse.ArgumentParser(description='send data to whatsapp contacts')

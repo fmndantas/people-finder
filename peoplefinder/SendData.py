@@ -35,36 +35,32 @@ def send_image_data(driver, phone, img_path, img_label):
             return None
         except NoSuchElementException:
             pass
-        driver.find_element(By.XPATH, clip_xpath).click()
+        while True:
+            try:
+                driver.find_element(By.XPATH, clip_xpath).click()
+            except ElementClickInterceptedException:
+                continue
+            else:
+                break
         driver.find_element(By.XPATH, image_xpath).click()
         autoit.win_wait("File Upload")
-        pdb.set_trace()
-        # Minimize
-        autoit.win_set_state("File Upload", properties.SW_MINIMIZE)
-        pdb.set_trace()
+        # pdb.set_trace()
+        autoit.win_set_state("File Upload", properties.SW_MINIMIZE)  # minimize
         autoit.control_send("File Upload", "[CLASS:Edit]", img_path, mode=0)
-        # todo pyautoit typing incorrect image address here
-        pdb.set_trace()
         sleep(1)
         autoit.control_click("File Upload", "[CLASS:Button]")
-        pdb.set_trace()
         autoit.win_close("File Upload")
-        pdb.set_trace()
         autoit.win_wait_close("File Upload")
-        pdb.set_trace()
-        add_caption_xpath = '/html/body/div[1]/div/div/div[2]/div[2]/span/div/span/div/div/div[2]/div/span/div/div[2]/div/div[3]/div[1]'
+        add_caption_xpath = '/html/body/div[1]/div/div/div[2]/div[2]/span/div/span/div/div/div[2]/div/span/div/div[2]/div/div[3]/div[1]/div[2]'
         try:
             WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, add_caption_xpath)))
         except (TimeoutError, NoSuchElementException):
             return None
-        pdb.set_trace()
         add_caption = driver.find_element(By.XPATH, add_caption_xpath)
-        pdb.set_trace()
         if img_label:
             add_caption.send_keys(img_label)
         add_caption.send_keys(Keys.ENTER)
         sleep(2)  # waits until the image has been sent
         return img_label
     else:
-        # The file is wrong
-        driver.close()
+        return None
